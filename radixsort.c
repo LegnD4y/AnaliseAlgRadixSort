@@ -1,8 +1,8 @@
-#include <stdio.h>        
-#include <stdlib.h>       
-#include <time.h>         
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define MAX 1000000000    
+#define MAX 1000000
 
 int getMax(int *arr, int n)
 {
@@ -29,9 +29,9 @@ void countingSort(int *arr, int n, int exp)
     count[(arr[i] / exp) % 10]++;  // c13*(n)
   }
 
-  for(int i = 1; i < 10; i++)      // c14 + c15*(10) + c16*(9)
+  for(int i = 1; i < 10; i++)      // c14 + c15*(k) + c16*(k-1)
   {
-    count[i] += count[i - 1];      // c17*(9)
+    count[i] += count[i - 1];      // c17*(k-1)
   }
 
   for(int i = n - 1; i >= 0; i--)  // c18 + c19*(n) + c20*(n-1)
@@ -53,7 +53,7 @@ void radixSort(int *arr, int n)
 {
   int max = getMax(arr, n);        // T1(n)
 
-  for (int exp = 1; max / exp > 0; exp *= 10) // c29 + c30*(d) + c31*(d)
+  for (int exp = 1; max / exp > 0; exp *= 10) // c29 + c30*(k) + c31*(k)
   {
     countingSort(arr, n, exp);     // T2(n)
   }
@@ -67,6 +67,7 @@ void printArray(int *arr, int n)
   {
     printf("%d ", arr[i]);
   }
+  
   printf("\n");
 
   return;
@@ -79,6 +80,7 @@ int main()
   int *arr = (int*)malloc(MAX * sizeof(int));
   
   srand(time(NULL));
+
   for (int i = 0; i < MAX; i++)
   {
     arr[i] = rand() % MAX;
@@ -92,7 +94,7 @@ int main()
 
   tempo = (double)(end - start) / CLOCKS_PER_SEC;
 
-  printf("\n Tempo: %f segundos\n", tempo);
+  printf("\n Tempo: %f segundos para ordenar o vetor aleatorio\n", tempo);
 
   start = clock();
 
@@ -102,7 +104,7 @@ int main()
 
   tempo = (double)(end - start) / CLOCKS_PER_SEC;
 
-  printf("\n Tempo: %f segundos para ordear o vetor ordenado\n", tempo);
+  printf("\n Tempo: %f segundos para ordenar o vetor ordenado\n", tempo);
 
   free(arr);
 
@@ -112,7 +114,7 @@ int main()
 
 /*
 ========================================
-FUNÇÕES DE CUSTO 
+FUNÇÕES DE CUSTO
 ========================================
 
 1) getMax:
@@ -127,6 +129,7 @@ c1
 + c7
 
 T1(n) = a*n + b
+
 => O(n)
 
 
@@ -138,8 +141,8 @@ T2(n) =
 c8 + c9
 + (c10 + c11*n + c12*(n-1))
 + c13*n
-+ (c14 + c15*10 + c16*9)
-+ c17*9
++ (c14 + c15*k + c16*(k-1))
++ c17*(k-1)
 + (c18 + c19*n + c20*(n-1))
 + c21*n + c22*n + c23*n
 + (c24 + c25*n + c26*(n-1))
@@ -148,8 +151,9 @@ c8 + c9
 
 Simplificando:
 
-T2(n) = a*n + b
-=> O(n)
+T2(n) = a*n + b*k + c
+
+=> O(n + k)
 
 
 ----------------------------------------
@@ -164,13 +168,13 @@ T1(n)
 Como:
 
 T1(n) = O(n)
-T2(n) = O(n)
+T2(n) = O(n + k)
 
 Então:
 
 T3(n) =
 O(n)
-+ k * O(n)
++ k * O(n + k)
 
 => T3(n) = O(n*k)
 
