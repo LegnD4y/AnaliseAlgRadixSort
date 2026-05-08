@@ -1,112 +1,112 @@
-#include <stdio.h>        // c1
-#include <stdlib.h>       // c2
-#include <time.h>         // c3
+#include <stdio.h>        
+#include <stdlib.h>       
+#include <time.h>         
 
-#define MAX 1000000000    // c4
+#define MAX 1000000000    
 
 int getMax(int *arr, int n)
 {
-  int max = arr[0];                 // c5
+  int max = arr[0];                 // c1
   
-  for(int i = 1; i < n; i++)        // c6 + c7*(n) + c8*(n-1)
+  for(int i = 1; i < n; i++)        // c2 + c3*(n) + c4*(n-1)
   {
-    if(arr[i] > max)                // c9*(n-1)
+    if(arr[i] > max)                // c5*(n-1)
     {
-      max = arr[i];                 // c10 (até n-1 vezes)
+      max = arr[i];                 // c6 (até n-1 vezes)
     }
   }
 
-  return(max);                      // c11
+  return(max);                      // c7
 }
 
 void countingSort(int *arr, int n, int exp)
 {
-  int *output = (int*)malloc(n * sizeof(int)); // c12
-  int count[10] = {0};                         // c13
+  int *output = (int*)malloc(n * sizeof(int)); // c8
+  int count[10] = {0};                        // c9
 
-  for(int i = 0; i < n; i++)       // c14 + c15*(n) + c16*(n-1)
+  for(int i = 0; i < n; i++)       // c10 + c11*(n) + c12*(n-1)
   {
-    count[(arr[i] / exp) % 10]++;  // c17*(n)
+    count[(arr[i] / exp) % 10]++;  // c13*(n)
   }
 
-  for(int i = 1; i < 10; i++)      // c18 + c19*(10) + c20*(9)
+  for(int i = 1; i < 10; i++)      // c14 + c15*(10) + c16*(9)
   {
-    count[i] += count[i - 1];      // c21*(9)
+    count[i] += count[i - 1];      // c17*(9)
   }
 
-  for(int i = n - 1; i >= 0; i--)  // c22 + c23*(n) + c24*(n-1)
+  for(int i = n - 1; i >= 0; i--)  // c18 + c19*(n) + c20*(n-1)
   {
-    int digit = (arr[i] / exp) % 10; // c25*(n)
-    output[count[digit] - 1] = arr[i]; // c26*(n)
-    count[digit]--;                    // c27*(n)
+    int digit = (arr[i] / exp) % 10; // c21*(n)
+    output[count[digit] - 1] = arr[i]; // c22*(n)
+    count[digit]--;                    // c23*(n)
   }
 
-  for(int i = 0; i < n; i++)       // c28 + c29*(n) + c30*(n-1)
+  for(int i = 0; i < n; i++)       // c24 + c25*(n) + c26*(n-1)
   {
-    arr[i] = output[i];            // c31*(n)
+    arr[i] = output[i];            // c27*(n)
   }
   
-  free(output);                    // c32
+  free(output);                    // c28
 }
 
 void radixSort(int *arr, int n)
 {
   int max = getMax(arr, n);        // T1(n)
 
-  for (int exp = 1; max / exp > 0; exp *= 10) // c33 + c34*(d) + c35*(d)
+  for (int exp = 1; max / exp > 0; exp *= 10) // c29 + c30*(d) + c31*(d)
   {
     countingSort(arr, n, exp);     // T2(n)
   }
 
-  return;                          // c36
+  return;                          // c32
 }
 
 void printArray(int *arr, int n)
 {
-  for(int i = 0; i < n; i++)       // c37*(n)
+  for(int i = 0; i < n; i++)
   {
-    printf("%d ", arr[i]);         // c38*(n)
+    printf("%d ", arr[i]);
   }
-  printf("\n");                    // c39
+  printf("\n");
 
-  return;                          // c40
+  return;
 }
 
 int main()
 {
-  clock_t start, end;              // c41
-  double tempo;                    // c42
-  int *arr = (int*)malloc(MAX * sizeof(int)); // c43
+  clock_t start, end;
+  double tempo;
+  int *arr = (int*)malloc(MAX * sizeof(int));
   
-  srand(time(NULL));               // c44
-  for (int i = 0; i < MAX; i++)    // c45 + c46*(MAX) + c47*(MAX-1)
+  srand(time(NULL));
+  for (int i = 0; i < MAX; i++)
   {
-    arr[i] = rand() % MAX;         // c48*(MAX)
+    arr[i] = rand() % MAX;
   }
 
-  start = clock();                 // c49
+  start = clock();
 
-  radixSort(arr, MAX);             // T(n)
+  radixSort(arr, MAX);
 
-  end = clock();                   // c50
+  end = clock();
 
-  tempo = (double)(end - start) / CLOCKS_PER_SEC; // c51
+  tempo = (double)(end - start) / CLOCKS_PER_SEC;
 
-  printf("\n Tempo: %f segundos\n", tempo); // c52
+  printf("\n Tempo: %f segundos\n", tempo);
 
-  start = clock();                 // c53
+  start = clock();
 
-  radixSort(arr, MAX);             // T(n)
+  radixSort(arr, MAX);
 
-  end = clock();                   // c54
+  end = clock();
 
-  tempo = (double)(end - start) / CLOCKS_PER_SEC; // c55
+  tempo = (double)(end - start) / CLOCKS_PER_SEC;
 
-  printf("\n Tempo: %f segundos para ordear o vetor ordenado\n", tempo); // c56
+  printf("\n Tempo: %f segundos para ordear o vetor ordenado\n", tempo);
 
-  free(arr);                       // c57
+  free(arr);
 
-  return(0);                       // c58
+  return(0);
 }
 
 
@@ -118,13 +118,13 @@ FUNÇÕES DE CUSTO
 1) getMax:
 
 T1(n) =
-c5
-+ c6
-+ c7*(n)
-+ c8*(n-1)
-+ c9*(n-1)
-+ c10*(n-1)
-+ c11
+c1
++ c2
++ c3*(n)
++ c4*(n-1)
++ c5*(n-1)
++ c6*(n-1)
++ c7
 
 T1(n) = a*n + b
 => O(n)
@@ -135,16 +135,16 @@ T1(n) = a*n + b
 2) countingSort:
 
 T2(n) =
-c12 + c13
-+ (c14 + c15*n + c16*(n-1))
-+ c17*n
-+ (c18 + c19*10 + c20*9)
-+ c21*9
-+ (c22 + c23*n + c24*(n-1))
-+ c25*n + c26*n + c27*n
-+ (c28 + c29*n + c30*(n-1))
-+ c31*n
-+ c32
+c8 + c9
++ (c10 + c11*n + c12*(n-1))
++ c13*n
++ (c14 + c15*10 + c16*9)
++ c17*9
++ (c18 + c19*n + c20*(n-1))
++ c21*n + c22*n + c23*n
++ (c24 + c25*n + c26*(n-1))
++ c27*n
++ c28
 
 Simplificando:
 
@@ -158,31 +158,30 @@ T2(n) = a*n + b
 
 T3(n) =
 T1(n)
-+ d * T2(n)
++ k * (c29 + c30 + c31 + T2(n))
++ c32
+
+Como:
+
+T1(n) = O(n)
+T2(n) = O(n)
+
+Então:
 
 T3(n) =
-O(n) + d * O(n)
+O(n)
++ k * O(n)
 
-=> T3(n) = O(n*d)
+=> T3(n) = O(n*k)
 
-
-----------------------------------------
-
-4) main:
-
-Inicialização:
-O(MAX)
-
-Ordenação:
-O(n*d)
 
 ----------------------------------------
 
 COMPLEXIDADE FINAL:
 
-T(n) = O(n*d)
+T(n) = O(n*k)
 
-Se d constante:
+Se k constante:
 => O(n)
 
 
@@ -190,9 +189,9 @@ Se d constante:
 
 CASOS:
 
-Melhor caso:  Ω(n*d)
-Caso médio:   Θ(n*d)
-Pior caso:    O(n*d)
+Melhor caso:  Ω(n*k)
+Caso médio:   Θ(n*k)
+Pior caso:    O(n*k)
 
 ========================================
 */
